@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact Hub | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --neon-blue: #00f2ff;
+            --neon-purple: #7000ff;
+            --dark-bg: #030712;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        /* Prevent Horizontal Scrolling */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-main);
+            background: radial-gradient(circle at top, rgba(99, 102, 241, 0.1), transparent 300px);
+            min-height: 100vh;
+        }
+
+        /* Centralized Container */
+        .container {
+            width: 100%;
+            max-width: 450px; /* Optimized for mobile screens */
+            margin: 0 auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 10px 5px;
+        }
+
+        .back-btn {
+            width: 42px; height: 42px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .title-section h1 {
+            font-size: 22px; font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Centered Grid */
+        .hub-grid {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .hub-card {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            text-decoration: none;
+            color: white;
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content vertically */
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .hub-card:active {
+            border-color: var(--neon-blue);
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .icon-wrapper {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+        }
+
+        .icon-wrapper svg { width: 28px; height: 28px; }
+
+        .card-info span { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .card-info h3 { font-size: 16px; margin-top: 4px; font-weight: 600; }
+
+        /* Actions Centering */
+        .actions-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-link {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+
+        .btn-wa { background: #25D366; color: white; }
+        .btn-outline { border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+        .btn-phone { background: var(--primary); color: white; }
+
+        /* Form Design - Full Width within Container */
+        .contact-form {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 100px;
+        }
+
+        .contact-form h2 { font-size: 18px; margin-bottom: 15px; text-align: center; }
+
+        .input-group { margin-bottom: 12px; width: 100%; }
+        .input-group label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 6px; margin-left: 5px; }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .input-group input:focus { border-color: var(--neon-blue); }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--neon-purple));
+            color: white; border: none; padding: 15px;
+            border-radius: 15px; font-weight: 700; font-size: 14px;
+            cursor: pointer; margin-top: 10px;
+        }
+
+        /* Fixed Bottom Button */
+        .footer-action {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 15px 20px 30px;
+            background: linear-gradient(to top, var(--dark-bg) 90%, transparent);
+            z-index: 100; display: flex; justify-content: center;
+        }
+
+        .exit-btn {
+            width: 100%; max-width: 400px;
+            background: rgba(255,255,255,0.05);
+            color: #fff; border: 1px solid var(--border); padding: 15px;
+            border-radius: 15px; font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="back-btn" onclick="navToLogin()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </div>
+            <div class="title-section">
+                <h1>Contact Hub</h1>
+                <p style="font-size: 10px; color: var(--text-dim);">CENTERED FOR MOBILE DISPLAY</p>
+            </div>
+        </header>
+
+        <div class="hub-grid">
+            <!-- WhatsApp -->
+            <div class="hub-card">
+                <div class="card-header">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.553 4.189 1.602 6.006L0 24l6.149-1.613a11.77 11.77 0 005.9 1.594h.005c6.632 0 12.028-5.398 12.03-12.03a11.75 11.75 0 00-3.417-8.461z"/></svg>
+                    </div>
+                    <div class="card-info">
+                        <span>WhatsApp Center</span>
+                        <h3>Official Support</h3>
+                    </div>
+                </div>
+                <div class="actions-group">
+                    <a href="https://whatsapp.com/channel/0029Vb5TvtC89iniJxxUOx3G" class="btn-link btn-wa">Channel</a>
+                    <a href="https://wa.me/923495031007" class="btn-link btn-outline" style="border-color:#25D366; color:#25D366;">Chat</a>
+                </div>
+            </div>
+
+            <!-- Phone Call -->
+            <div class="hub-card">
+                <div class="card-header">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </div>
+                    <div class="card-info">
+                        <span>Direct Call</span>
+                        <h3>Voice Hotline</h3>
+                    </div>
+                </div>
+                <div class="actions-group">
+                    <a href="tel:03495031007" class="btn-link btn-phone">Line 1</a>
+                    <a href="tel:03149104112" class="btn-link btn-phone">Line 2</a>
+                </div>
+            </div>
+
+            <!-- Email (Provided Code) -->
+            <a href="mailto:rajahaider9053@gmail.com" class="hub-card">
+                <div class="card-header">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 48 48">
+                            <path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"></path>
+                            <path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z"></path>
+                            <polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"></polygon>
+                            <path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"></path>
+                            <path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"></path>
+                        </svg>
+                    </div>
+                    <div class="card-info">
+                        <span>Official Email</span>
+                        <h3>rajahaider9053@gmail.com</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="contact-form">
+            <h2>Quick Inquiry</h2>
+            <form id="fForm">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <textarea rows="3" placeholder="How can we help?" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Secure Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fixed Exit -->
+    <div class="footer-action">
+        <button class="exit-btn" onclick="navToLogin()">Back to Login</button>
+    </div>
+
+    <script>
+        function navToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('fForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            btn.innerText = 'Sent Successfully!';
+            btn.style.background = '#22c55e';
+            setTimeout(() => {
+                this.reset();
+                btn.innerText = 'Send Secure Message';
+                btn.style.background = 'linear-gradient(90deg, #6366f1, #7000ff)';
+            }, 2000);
+        });
+
+        // Block accidental scrolling
+        window.onpopstate = function() {
+            window.location.href = 'login.html';
+        };
+        history.pushState(null, null, window.location.href);
+    </script>
+</body>
+</html>
