@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite Access | Homigo Care</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --link-color: #38bdf8; /* Sky Blue for clickable links */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Mesh Gradient Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+            z-index: -1;
+            filter: blur(80px);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 40px 24px;
+            width: 90%;
+            max-width: 420px;
+            margin: 40px 0 20px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .auth-card::before {
+            content: "";
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            background: linear-gradient(45deg, var(--primary), transparent, var(--accent));
+            z-index: -1;
+            border-radius: 41px;
+            opacity: 0.2;
+        }
+
+        .logo-box {
+            display: inline-block;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            margin-bottom: 24px;
+        }
+
+        .logo-box img {
+            height: 60px;
+            width: auto;
+        }
+
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 32px; }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding-left: 54px;
+            padding-right: 20px;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 18px;
+            top: 18px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .input-field:focus + .field-icon {
+            color: var(--primary);
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 13px;
+            color: #94a3b8;
+            text-decoration: none;
+            margin: -10px 0 25px;
+            transition: 0.3s;
+        }
+
+        .forgot-link:hover { color: var(--link-color); }
+
+        .action-btn {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            border: none;
+            border-radius: 18px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+            transition: 0.3s;
+        }
+
+        .action-btn:active { transform: scale(0.98); }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        .line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+        .divider span { font-size: 10px; font-weight: 800; color: #475569; letter-spacing: 1px; text-transform: uppercase; }
+
+        .google-btn {
+            width: 100%;
+            height: 56px;
+            background: white;
+            border: none;
+            border-radius: 18px;
+            color: #0f172a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .google-btn:hover { background: #f1f5f9; transform: translateY(-2px); }
+
+        .footer-text { margin-top: 30px; color: #94a3b8; font-size: 14px; }
+        .footer-text a { color: white; font-weight: 700; text-decoration: none; }
+        .footer-text a:hover { color: var(--link-color); }
+
+        /* Bottom Links Area */
+        .legal-footer {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .legal-main { font-size: 12px; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+        .legal-main a { color: var(--link-color); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; }
+        .legal-main a:hover { border-color: var(--link-color); }
+
+        .legal-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .legal-grid a { color: var(--link-color); text-decoration: none; }
+        .legal-grid a:hover { text-decoration: underline; }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div id="toast"></div>
+
+    <div class="auth-card">
+        <div class="logo-box">
+            <img src="logo.svg" alt="Logo" onerror="this.src='1000397811.jpg'">
+        </div>
+        <h1>Secure Login</h1>
+        <p class="subtitle">Access the most advanced care network</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="tel" id="phone" class="input-field" placeholder="Phone Number" required>
+                <svg class="field-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" class="input-field" placeholder="Password" required>
+                <svg class="field-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <button type="button" onclick="togglePassword()" class="eye-btn">
+                    <svg id="eye" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+
+            <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+
+            <button type="submit" class="action-btn">
+                Sign In
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </form>
+
+        <div class="divider">
+            <div class="line"></div>
+            <span>Cloud Auth</span>
+            <div class="line"></div>
+        </div>
+
+        <button id="googleBtn" class="google-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Sign in with Google
+        </button>
+
+        <p class="footer-text">
+            New here? <a href="sign-up.html">Join Now</a>
+        </p>
+    </div>
+
+    <!-- Clickable Legal Links -->
+    <div class="legal-footer">
+        <p class="legal-main">
+            By logging in, you agree to our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Protocol</a>.
+        </p>
+        <div class="legal-grid">
+            <a href="support.html">Support</a>
+            <a href="security.html">Security</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        // Using the config file location you provided
+        import { firebaseConfig } from "./firebase-config.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        window.togglePassword = () => {
+            const input = document.getElementById('password');
+            const eye = document.getElementById('eye');
+            if(input.type === 'password') {
+                input.type = 'text';
+                eye.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                input.type = 'password';
+                eye.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        };
+
+        // Google Sign In Logic
+        document.getElementById('googleBtn').onclick = async () => {
+            showToast("Opening Secure Vault...");
+            try {
+                const result = await signInWithPopup(auth, provider);
+                // Save google sign in status for profile logic later
+                localStorage.setItem('isGoogleLogin', 'true');
+                showToast("Identity Verified!");
+                setTimeout(() => window.location.href = 'dashboard.html', 1000);
+            } catch (err) {
+                console.error(err);
+                showToast("Connection Interrupted.");
+            }
+        };
+
+        // Fake Phone/Pass Logic (as requested, not using Firebase for this)
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            const pass = document.getElementById('password').value;
+
+            if(phone.length >= 10 && pass.length >= 6) {
+                showToast("Authenticating...");
+                localStorage.setItem('isGoogleLogin', 'false');
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            } else {
+                showToast("Invalid Credentials");
+            }
+        };
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>

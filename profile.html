@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>User Profile | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --danger: #ef4444;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.85);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
+            z-index: -1;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            border: 1px solid var(--border);
+        }
+
+        /* Profile Header Card */
+        .profile-header {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 35px;
+            padding: 30px 20px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 40px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            background: #1e293b;
+        }
+
+        .edit-overlay {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--primary);
+            width: 35px;
+            height: 35px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--dark-bg);
+            cursor: pointer;
+        }
+
+        .user-info h2 { font-size: 24px; margin-bottom: 5px; }
+        .method-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* Settings Options */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .setting-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .setting-item:active { transform: scale(0.98); background: rgba(255,255,255,0.05); }
+
+        .icon-circle {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .setting-text { flex: 1; }
+        .setting-text h4 { font-size: 15px; margin-bottom: 2px; }
+        .setting-text p { font-size: 12px; color: #64748b; }
+
+        .chevron { color: #475569; }
+
+        .danger-item { border-color: rgba(239, 68, 68, 0.2); }
+        .danger-item .icon-circle { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            width: 100%;
+            border-radius: 35px 35px 0 0;
+            padding: 30px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+        .input-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            font-size: 15px;
+        }
+
+        .save-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 16px;
+            border-radius: 18px;
+            border: none;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        #fileInput { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+
+    <header>
+        <a href="dashboard.html" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+        <h3 style="font-weight: 700;">Settings</h3>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- Profile Info Card -->
+    <div class="profile-header">
+        <div class="avatar-container">
+            <img src="avatar.svg" id="profileImg" class="profile-pic" onerror="this.src='1000397935.jpg'">
+            <label for="fileInput" class="edit-overlay">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+            </label>
+            <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+        </div>
+        <div class="user-info">
+            <h2 id="dispName">User Name</h2>
+            <div class="method-tag" id="loginMethod">
+                <!-- Icon and Text injected via JS -->
+            </div>
+        </div>
+        <button onclick="deleteAvatar()" style="background: none; border: none; color: var(--danger); font-size: 11px; margin-top: 15px; cursor: pointer; font-weight: 600;">Delete Profile Picture</button>
+    </div>
+
+    <!-- Settings Options -->
+    <div class="settings-list">
+        <div class="setting-item">
+            <div class="icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <div class="setting-text">
+                <h4>Phone Number</h4>
+                <p id="dispPhone">Not Set</p>
+            </div>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+
+        <div class="setting-item" onclick="openModal()">
+            <div class="icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <div class="setting-text">
+                <h4>Security</h4>
+                <p>Change Account Password</p>
+            </div>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+
+        <div class="setting-item danger-item" onclick="handleLogout()">
+            <div class="icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </div>
+            <div class="setting-text">
+                <h4>Logout</h4>
+                <p>Sign out of your account</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="pwModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px;">Update Password</h3>
+            <div class="input-group">
+                <label>Current Password</label>
+                <input type="password" id="oldPw" placeholder="••••••••">
+            </div>
+            <div class="input-group">
+                <label>New Password</label>
+                <input type="password" id="newPw" placeholder="••••••••">
+            </div>
+            <button class="save-btn" onclick="savePassword()">Update Password</button>
+            <button onclick="closeModal()" style="width: 100%; background: none; border: none; color: #64748b; margin-top: 15px; font-weight: 600;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize User Data
+        window.onload = () => {
+            const user = JSON.parse(localStorage.getItem('temp_user') || '{}');
+            
+            // Display User Info
+            document.getElementById('dispName').innerText = user.name || 'Elite Member';
+            document.getElementById('dispPhone').innerText = user.phone || 'Contact Info Not Found';
+
+            // Check Login Method (Google vs Phone)
+            const methodTag = document.getElementById('loginMethod');
+            if(user.googleId) {
+                methodTag.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Signed in with Google
+                `;
+            } else {
+                methodTag.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    Signed in with Phone
+                `;
+            }
+
+            // Load saved avatar if exists
+            const savedImg = localStorage.getItem('user_avatar');
+            if(savedImg) document.getElementById('profileImg').src = savedImg;
+        }
+
+        // Image Handling
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('profileImg');
+                output.src = reader.result;
+                localStorage.setItem('user_avatar', reader.result);
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function deleteAvatar() {
+            if(confirm("Are you sure you want to remove your profile picture?")) {
+                localStorage.removeItem('user_avatar');
+                document.getElementById('profileImg').src = '1000397935.jpg';
+            }
+        }
+
+        // Modal Logic
+        function openModal() { document.getElementById('pwModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('pwModal').style.display = 'none'; }
+
+        function savePassword() {
+            const newPw = document.getElementById('newPw').value;
+            if(newPw.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return;
+            }
+            
+            const user = JSON.parse(localStorage.getItem('temp_user') || '{}');
+            user.password = newPw;
+            localStorage.setItem('temp_user', JSON.stringify(user));
+            
+            alert("Password updated successfully!");
+            closeModal();
+        }
+
+        function handleLogout() {
+            if(confirm("Do you really want to logout?")) {
+                // Keep the registration data but clear session if needed
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

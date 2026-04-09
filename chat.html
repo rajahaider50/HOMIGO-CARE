@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --dark-bg: #030712;
+            --chat-bg: #0f172a;
+            --bubble-sent: #4f46e5;
+            --bubble-received: #1e293b;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .chat-header {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid var(--primary);
+        }
+
+        .user-status {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-status h4 { font-size: 15px; font-weight: 700; }
+        .user-status span { font-size: 11px; color: #22c55e; }
+
+        .header-actions { display: flex; gap: 18px; color: #94a3b8; }
+        .header-actions svg { cursor: pointer; transition: 0.2s; }
+        .header-actions svg:active { color: var(--primary); transform: scale(0.9); }
+
+        /* Chat Area */
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent);
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .msg.sent {
+            align-self: flex-end;
+            background: var(--bubble-sent);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.received {
+            align-self: flex-start;
+            background: var(--bubble-received);
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .msg-img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 12px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .timestamp {
+            font-size: 9px;
+            margin-top: 5px;
+            display: block;
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 15px 20px 30px;
+            background: var(--dark-bg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: var(--chat-bg);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px 0;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .attach-btn, .camera-btn { color: #64748b; cursor: pointer; }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        #file-input { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="chat-header">
+        <div class="header-left">
+            <a href="dashboard.html" class="back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+            <a href="profile.html" class="user-profile-link">
+                <img src="1000397812.jpg" alt="Doctor" class="chat-avatar" onerror="this.src='1000397935.jpg'">
+                <div class="user-status">
+                    <h4 id="chatPartner">Dr. Sarah Khan</h4>
+                    <span>Online</span>
+                </div>
+            </a>
+        </div>
+        <div class="header-actions">
+            <svg onclick="alert('Starting voice call...')" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <svg onclick="alert('Starting video call...')" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+        </div>
+    </header>
+
+    <!-- Messages Area -->
+    <div class="chat-messages" id="chatBox">
+        <div class="msg received">
+            Hello! How are you feeling today?
+            <span class="timestamp">10:30 AM</span>
+        </div>
+        <div class="msg sent">
+            I'm feeling much better, thank you doctor.
+            <span class="timestamp">10:32 AM</span>
+        </div>
+        <div class="msg received">
+            That's great to hear. Did you take the prescribed medicine?
+            <span class="timestamp">10:33 AM</span>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+        <div class="input-wrapper">
+            <label for="file-input" class="attach-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+            </label>
+            <input type="file" id="file-input" accept="image/*" onchange="sendImage(event)">
+            
+            <input type="text" id="msgInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            
+            <div class="camera-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </div>
+        </div>
+        <button class="send-btn" onclick="sendMessage()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const msgInput = document.getElementById('msgInput');
+
+        function sendMessage() {
+            const text = msgInput.value.trim();
+            if (text === "") return;
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg sent';
+            msgDiv.innerHTML = `${text}<span class="timestamp">${time}</span>`;
+            
+            chatBox.appendChild(msgDiv);
+            msgInput.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Auto-reply simulation
+            setTimeout(() => {
+                receiveMessage("Our team will get back to you shortly.");
+            }, 1500);
+        }
+
+        function receiveMessage(text) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg received';
+            msgDiv.innerHTML = `${text}<span class="timestamp">${time}</span>`;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg sent';
+                msgDiv.innerHTML = `<img src="${e.target.result}" class="msg-img"><span class="timestamp">${time}</span>`;
+                chatBox.appendChild(msgDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>

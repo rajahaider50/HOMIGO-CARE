@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Bookings | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --danger: #ef4444;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.85);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
+            z-index: -1;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            border: 1px solid var(--border);
+        }
+
+        /* Tabs System */
+        .tabs {
+            display: flex;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #64748b;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Booking Cards */
+        .booking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .booking-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .type-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .status-active { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+        .status-history { background: #64748b; }
+
+        .provider-info h3 { font-size: 18px; margin-bottom: 4px; }
+        .provider-info p { color: #94a3b8; font-size: 13px; }
+
+        .booking-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item { display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 12px; }
+        .detail-item svg { width: 14px; color: var(--primary); }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-cancel { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .btn-cancel:active { background: var(--danger); color: white; }
+        
+        .btn-reschedule { background: var(--primary); color: white; }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+        .empty-state svg { width: 60px; height: 60px; margin-bottom: 15px; opacity: 0.3; }
+
+        /* Custom Modal for Cancellation */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: #0f172a;
+            border-radius: 30px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+
+    <header>
+        <a href="dashboard.html" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+        <h1 style="font-size: 22px; font-weight: 700;">My Appointments</h1>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('active')">Active</div>
+        <div class="tab" onclick="switchTab('history')">History</div>
+    </div>
+
+    <div class="booking-list" id="bookingContainer">
+        <!-- Bookings will be loaded here -->
+    </div>
+
+    <!-- Cancellation Confirm Modal -->
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 10px;">Cancel Booking?</h3>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="closeModal()" style="background: rgba(255,255,255,0.05); color: white;">No, Keep it</button>
+                <button class="btn" id="confirmCancelBtn" style="background: var(--danger); color: white;">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'active';
+        let bookingToDelete = null;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderBookings();
+        }
+
+        function renderBookings() {
+            const container = document.getElementById('bookingContainer');
+            const bookings = JSON.parse(localStorage.getItem('my_bookings') || '[]');
+            const history = JSON.parse(localStorage.getItem('booking_history') || '[]');
+            
+            container.innerHTML = '';
+
+            const list = currentTab === 'active' ? bookings : history;
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <p>No ${currentTab} appointments found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'booking-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="type-badge">${item.category}</span>
+                        <span style="font-size: 12px; font-weight: 600; color: ${currentTab === 'active' ? '#22c55e' : '#64748b'}">
+                            <span class="status-dot ${currentTab === 'active' ? 'status-active' : 'status-history'}"></span>
+                            ${currentTab === 'active' ? 'Upcoming' : 'Completed'}
+                        </span>
+                    </div>
+                    <div class="provider-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.type}</p>
+                    </div>
+                    <div class="booking-details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                            ${item.date}
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${item.time}
+                        </div>
+                    </div>
+                    ${currentTab === 'active' ? `
+                        <div class="card-actions">
+                            <button class="btn btn-cancel" onclick="openCancelModal(${item.id})">Cancel</button>
+                            <button class="btn btn-reschedule" onclick="window.location.href='chat.html'">Contact</button>
+                        </div>
+                    ` : `
+                        <button class="btn" style="background: rgba(255,255,255,0.05); color: white; width: 100%;" onclick="window.location.href='view.html?type=${item.category}'">Book Again</button>
+                    `}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openCancelModal(id) {
+            bookingToDelete = id;
+            document.getElementById('cancelModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('cancelModal').style.display = 'none';
+        }
+
+        document.getElementById('confirmCancelBtn').onclick = function() {
+            let bookings = JSON.parse(localStorage.getItem('my_bookings') || '[]');
+            const toCancel = bookings.find(b => b.id === bookingToDelete);
+            
+            if (toCancel) {
+                // Move to history (optional) or just delete
+                let history = JSON.parse(localStorage.getItem('booking_history') || '[]');
+                toCancel.status = 'Cancelled';
+                // history.push(toCancel); // Uncomment if you want to keep cancelled in history
+                // localStorage.setItem('booking_history', JSON.stringify(history));
+
+                bookings = bookings.filter(b => b.id !== bookingToDelete);
+                localStorage.setItem('my_bookings', JSON.stringify(bookings));
+            }
+            
+            closeModal();
+            renderBookings();
+        };
+
+        window.onload = renderBookings;
+    </script>
+</body>
+</html>

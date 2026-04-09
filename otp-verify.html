@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verify Identity | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --link-color: #38bdf8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 40px 24px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .otp-icon-box {
+            display: inline-block;
+            padding: 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 30px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .otp-icon-box img {
+            height: 64px;
+            width: 64px;
+        }
+
+        h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 30px; line-height: 1.5; }
+        .phone-highlight { color: white; font-weight: 700; }
+
+        /* OTP Input Grid */
+        .otp-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .otp-box {
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .otp-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .timer-text {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: var(--link-color);
+            font-weight: 700;
+            cursor: pointer;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .resend-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .action-btn {
+            width: 100%; height: 60px;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            border: none; border-radius: 18px;
+            color: white; font-weight: 700; font-size: 16px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            cursor: pointer; transition: 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .change-method {
+            font-size: 13px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .change-method:hover { color: var(--link-color); }
+
+        #toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #fff; color: #000; padding: 12px 24px;
+            border-radius: 50px; font-size: 14px; font-weight: 700;
+            display: none; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div id="toast"></div>
+
+    <div class="auth-card">
+        <div class="otp-icon-box">
+            <img src="otp.svg" alt="OTP Icon" onerror="this.src='1000397812.jpg'">
+        </div>
+        <h1>Verification</h1>
+        <p class="subtitle">We've sent a 4-digit code to <br><span class="phone-highlight" id="displayPhone">+92 **********</span></p>
+
+        <form id="otpForm">
+            <div class="otp-grid">
+                <input type="number" class="otp-box" maxlength="1" oninput="moveNext(this, 1)" id="otp1">
+                <input type="number" class="otp-box" maxlength="1" oninput="moveNext(this, 2)" id="otp2">
+                <input type="number" class="otp-box" maxlength="1" oninput="moveNext(this, 3)" id="otp3">
+                <input type="number" class="otp-box" maxlength="1" oninput="moveNext(this, 4)" id="otp4">
+            </div>
+
+            <div class="timer-text">
+                Resend code in <span id="timer">60</span>s | 
+                <button type="button" class="resend-btn" id="resendBtn" onclick="restartTimer()">Resend Now</button>
+            </div>
+
+            <button type="submit" class="action-btn">
+                Verify & Create Account
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </button>
+        </form>
+
+        <a href="sign-up.html" class="change-method">Change Phone or Method</a>
+    </div>
+
+    <script>
+        // Display Phone Number from LocalStorage
+        const userData = JSON.parse(localStorage.getItem('temp_user') || '{}');
+        if(userData.phone) {
+            document.getElementById('displayPhone').innerText = userData.phone;
+        }
+
+        // Auto move to next input
+        function moveNext(el, nextId) {
+            if (el.value.length === 1 && nextId < 5) {
+                document.getElementById('otp' + (nextId + 1))?.focus();
+            }
+        }
+
+        // Timer Logic
+        let timeLeft = 60;
+        let timerInterval;
+
+        function startTimer() {
+            timeLeft = 60;
+            const timerEl = document.getElementById('timer');
+            const resendBtn = document.getElementById('resendBtn');
+            resendBtn.classList.remove('active');
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    resendBtn.classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function restartTimer() {
+            showToast("New OTP Sent!");
+            startTimer();
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        // Form Submit
+        document.getElementById('otpForm').onsubmit = (e) => {
+            e.preventDefault();
+            const o1 = document.getElementById('otp1').value;
+            const o2 = document.getElementById('otp2').value;
+            const o3 = document.getElementById('otp3').value;
+            const o4 = document.getElementById('otp4').value;
+
+            if(o1 && o2 && o3 && o4) {
+                showToast("Account Verified Successfully!");
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                showToast("Please enter complete OTP");
+            }
+        };
+
+        window.onload = startTimer;
+    </script>
+</body>
+</html>

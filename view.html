@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Explore Services | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
+            z-index: -1;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            width: 45px;
+            height: 45px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        /* Provider Cards */
+        .providers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .provider-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .provider-card:active { transform: scale(0.98); }
+
+        .provider-img {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .info { flex: 1; }
+        .info h3 { font-size: 18px; margin-bottom: 4px; }
+        .info p { color: #94a3b8; font-size: 13px; margin-bottom: 8px; }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        .book-now-btn {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Custom Alert */
+        #customAlert {
+            position: fixed;
+            top: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: #22c55e;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div id="customAlert">Booking Confirmed!</div>
+
+    <header>
+        <a href="dashboard.html" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+        <h1 class="category-title" id="pageTitle">Service</h1>
+    </header>
+
+    <div class="providers-list" id="providersList">
+        <!-- Providers will load here via JavaScript -->
+    </div>
+
+    <script>
+        // Extract category from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('type') || 'Doctor';
+        document.getElementById('pageTitle').innerText = category + 's';
+
+        // Mock Data for different categories
+        const data = {
+            Doctor: [
+                { id: 1, name: "Dr. Sarah Khan", sub: "Cardiologist", rating: "4.9", img: "1000397812.jpg" },
+                { id: 2, name: "Dr. Ahmed Malik", sub: "Neurologist", rating: "4.8", img: "1000397814.jpg" },
+                { id: 3, name: "Dr. Maria Zafar", sub: "General Physician", rating: "4.7", img: "1000397816.jpg" }
+            ],
+            Lab: [
+                { id: 4, name: "Global Lab Services", sub: "Blood & DNA Tests", rating: "4.9", img: "1000397909.jpg" },
+                { id: 5, name: "Homigo Diagnostics", sub: "Full Body Checkup", rating: "4.6", img: "1000397909.jpg" }
+            ],
+            Medical: [
+                { id: 6, name: "LifeCare Medical", sub: "24/7 Pharmacy", rating: "4.5", img: "1000397909.jpg" },
+                { id: 7, name: "Wellness Pharma", sub: "Organic Medicines", rating: "4.8", img: "1000397909.jpg" }
+            ],
+            Hospital: [
+                { id: 8, name: "City General Hospital", sub: "Emergency Care", rating: "5.0", img: "1000397909.jpg" },
+                { id: 9, name: "Indus Health Center", sub: "Multi-Specialty", rating: "4.7", img: "1000397909.jpg" }
+            ]
+        };
+
+        const currentProviders = data[category] || data['Doctor'];
+        const listDiv = document.getElementById('providersList');
+
+        function renderProviders() {
+            currentProviders.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'provider-card';
+                card.innerHTML = `
+                    <img src="${p.img}" class="provider-img" onerror="this.src='1000397935.jpg'">
+                    <div class="info">
+                        <h3>${p.name}</h3>
+                        <p>${p.sub}</p>
+                        <div class="rating">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            ${p.rating}
+                        </div>
+                    </div>
+                    <button class="book-now-btn" onclick="handleBooking('${p.name}', '${p.sub}', '${category}')">Book</button>
+                `;
+                listDiv.appendChild(card);
+            });
+        }
+
+        function handleBooking(name, subtitle, cat) {
+            // Get existing bookings or empty array
+            let bookings = JSON.parse(localStorage.getItem('my_bookings') || '[]');
+            
+            // Add new booking
+            const newBooking = {
+                id: Date.now(),
+                name: name,
+                type: subtitle,
+                category: cat,
+                date: new Date().toLocaleDateString(),
+                time: "10:00 AM" // Sample time
+            };
+            
+            bookings.push(newBooking);
+            localStorage.setItem('my_bookings', JSON.stringify(bookings));
+
+            // Show success alert
+            const alert = document.getElementById('customAlert');
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+                window.location.href = 'booking.html';
+            }, 1500);
+        }
+
+        window.onload = renderProviders;
+    </script>
+</body>
+</html>

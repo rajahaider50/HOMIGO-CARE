@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Homigo Care | Premium Access</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --dark-bg: #030712;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Mesh Gradient Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+            z-index: -1;
+            filter: blur(80px);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Splash Screen Styles */
+        #splash-container {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            z-index: 2;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        /* Circle around logo */
+        .logo-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            filter: blur(25px);
+            opacity: 0.4;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        .app-name {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--text-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textSlideUp 0.8s forwards 0.5s;
+        }
+
+        .loader-bar {
+            width: 150px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 20px auto 0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress {
+            position: absolute;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 10px;
+            animation: loadingMove 1.5s infinite ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glowPulse {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        @keyframes textSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes loadingMove {
+            0% { left: -40%; }
+            100% { left: 100%; }
+        }
+
+        /* Screen Exit Animation */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+
+    <div id="splash-container">
+        <div class="logo-wrapper">
+            <div class="logo-glow"></div>
+            <!-- logo.svg used as requested -->
+            <img src="logo.svg" alt="App Logo" class="logo-img" id="mainLogo">
+        </div>
+        <h1 class="app-name">Homigo Care</h1>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { firebaseConfig } from "./firebase-config.js";
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Fallback for missing logo.svg (using your uploaded jpg for safety during development)
+        const logo = document.getElementById('mainLogo');
+        logo.onerror = function() {
+            this.src = "1000397811.jpg";
+        };
+
+        window.addEventListener('load', () => {
+            // Wait for 3.5 seconds to show splash animation
+            setTimeout(() => {
+                checkAuthState();
+            }, 3500);
+        });
+
+        function checkAuthState() {
+            onAuthStateChanged(auth, (user) => {
+                document.body.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    if (user) {
+                        // If user is logged in, go to Dashboard
+                        window.location.href = "dashboard.html";
+                    } else {
+                        // If not, go to Login
+                        window.location.href = "login.html";
+                    }
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>
