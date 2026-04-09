@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Privacy Policy | Homigo Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Background */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+
+        /* Go back to Login */
+        .back-btn {
+            width: 45px;
+            height: 45px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-btn:active { transform: scale(0.9); }
+
+        .title-section h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Policy Card */
+        .policy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            margin-bottom: 120px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            font-size: 17px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .section h2 svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .section p {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        .bullet-list li {
+            font-size: 13.5px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .bullet-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* Security Badge */
+        .security-badge {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .security-badge svg { color: #22c55e; flex-shrink: 0; }
+        .security-badge span { font-size: 12px; color: #86efac; font-weight: 500; }
+
+        .footer-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 20px 40px;
+            background: linear-gradient(to top, var(--dark-bg) 70%, transparent);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+        }
+
+        .understand-btn {
+            width: 100%;
+            max-width: 500px;
+            background: linear-gradient(135deg, #4f46e5, var(--primary));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .understand-btn:active { transform: scale(0.97); }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <header>
+            <!-- Back Button Redirects to Login -->
+            <div class="back-btn" onclick="navToLogin()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </div>
+            <div class="title-section">
+                <h1>Privacy Policy</h1>
+                <p style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Protected by Encryption</p>
+            </div>
+        </header>
+
+        <div class="policy-card">
+            
+            <div class="section">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Information Collection
+                </h2>
+                <p>We only collect information that is essential for providing you with a high-quality medical booking experience:</p>
+                <ul class="bullet-list">
+                    <li>Basic details: Full Name, Phone Number, and Age.</li>
+                    <li>Medical History: Information shared specifically for consultation purposes.</li>
+                    <li>Device Info: For application performance and bug tracking.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Health Data Privacy
+                </h2>
+                <p>Your medical privacy is our top priority. We implement military-grade security standards:</p>
+                <ul class="bullet-list">
+                    <li>Chat logs between you and your doctor are end-to-end encrypted.</li>
+                    <li>Video/Audio calls are secured via encrypted P2P tunnels.</li>
+                    <li>No third party can access your medical records without your consent.</li>
+                </ul>
+                <div class="security-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Securely Encrypted with AES-256 Protocol</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    Data Usage
+                </h2>
+                <p>We value your trust. Your data is used strictly for:</p>
+                <ul class="bullet-list">
+                    <li>Managing your appointments and notifications.</li>
+                    <li>Improving booking efficiency and doctor matching.</li>
+                    <li><strong>We never sell your personal data</strong> to third-party brokers.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    User Rights
+                </h2>
+                <p>You maintain full control over your information:</p>
+                <ul class="bullet-list">
+                    <li>Access: Request a copy of your personal data.</li>
+                    <li>Deletion: Delete your account and all associated data permanently.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <!-- I Understand Redirects to Login -->
+        <button class="understand-btn" onclick="navToLogin()">I Understand</button>
+    </div>
+
+    <script>
+        // Global function to redirect to login page
+        function navToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        // Handle hardware back button for APK environment
+        window.onpopstate = function() {
+            window.location.href = 'login.html';
+        };
+        history.pushState(null, null, window.location.href);
+    </script>
+</body>
+</html>
