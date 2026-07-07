@@ -59,7 +59,7 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
       if (success && mounted) {
         // Create user in database
         final user = UserModel(
-          uid: authProvider.currentUser!.uid,
+          uid: authProvider.user!.uid,
           email: _emailController.text.trim(),
           phoneNumber: _phoneController.text.trim(),
           role: authProvider.selectedRole ?? 'patient',

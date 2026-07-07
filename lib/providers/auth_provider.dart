@@ -112,7 +112,7 @@ class AuthProvider extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
       },
-      onTimeout: () {
+      onTimeout: (String verificationId) {
         _error = 'Verification timed out. Please try again.';
         _isLoading = false;
         notifyListeners();

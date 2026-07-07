@@ -4,15 +4,17 @@ import 'package:flutter/foundation.dart'
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
-        return ios;
-      case TargetPlatform.web:
-        return webOptions;
-      default:
-        return android;
+    try {
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.android:
+          return android;
+        case TargetPlatform.iOS:
+          return ios;
+        default:
+          return android;
+      }
+    } catch (e) {
+      return android;
     }
   }
 
@@ -33,16 +35,5 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://homigo-care-8360e-default-rtdb.firebaseio.com',
     storageBucket: 'homigo-care-8360e.firebasestorage.app',
     iosBundleId: 'com.homigo.care',
-  );
-
-  static const FirebaseOptions webOptions = FirebaseOptions(
-    apiKey: 'AIzaSyCrcPI8ReNNKhsi6Kcn5Qeux4sgl5adp7E',
-    appId: '1:90367474956:web:b0ca9cf07db62429729d29',
-    messagingSenderId: '90367474956',
-    projectId: 'homigo-care-8360e',
-    authDomain: 'homigo-care-8360e.firebaseapp.com',
-    databaseURL: 'https://homigo-care-8360e-default-rtdb.firebaseio.com',
-    storageBucket: 'homigo-care-8360e.firebasestorage.app',
-    measurementId: 'G-F78BY2281Y',
   );
 }

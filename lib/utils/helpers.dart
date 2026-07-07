@@ -28,10 +28,10 @@ class Helpers {
     Navigator.of(context, rootNavigator: true).pop();
   }
 
-  static Future<bool> launchUrl(String url) async {
+  static Future<bool> launchCustomUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      return await launchUrl(url);
+      return await launchUrl(uri);
     }
     return false;
   }

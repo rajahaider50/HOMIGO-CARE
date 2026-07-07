@@ -44,8 +44,8 @@ class AppRoutes {
   static const String chat = '/chat';
   static const String diagnostics = '/diagnostics';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
+  static Route<dynamic> generateRoute(RouteSettings routeSettings) {
+    switch (routeSettings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case login:
@@ -67,12 +67,12 @@ class AppRoutes {
       case doctorsList:
         return MaterialPageRoute(builder: (_) => const DoctorsListScreen());
       case doctorDetail:
-        final args = settings.arguments as Map<String, dynamic>?;
+        final args = routeSettings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) => DoctorDetailScreen(doctorId: args?['doctorId'] ?? ''),
         );
       case booking:
-        final args = settings.arguments as Map<String, dynamic>?;
+        final args = routeSettings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) => BookingScreen(doctorId: args?['doctorId'] ?? ''),
         );
@@ -91,7 +91,7 @@ class AppRoutes {
       case adminDashboard:
         return MaterialPageRoute(builder: (_) => const AdminDashboardScreen());
       case chat:
-        final args = settings.arguments as Map<String, dynamic>?;
+        final args = routeSettings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) => ChatScreen(chatId: args?['chatId'] ?? ''),
         );
@@ -101,7 +101,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => Scaffold(
             body: Center(
-              child: Text('No route defined for ${settings.name}'),
+              child: Text('No route defined for ${routeSettings.name}'),
             ),
           ),
         );
