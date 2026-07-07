@@ -17,7 +17,6 @@ class UserProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  // Get current user data
   Future<void> loadCurrentUser(String uid) async {
     _isLoading = true;
     notifyListeners();
@@ -33,7 +32,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Create user
   Future<bool> createUser(UserModel user) async {
     _isLoading = true;
     _error = null;
@@ -53,7 +51,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Update user
   Future<bool> updateUser(String uid, Map<String, dynamic> data) async {
     _isLoading = true;
     _error = null;
@@ -75,7 +72,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Upload profile image
   Future<String?> uploadProfileImage(String uid, String filePath) async {
     try {
       final response = await _cloudinaryService.uploadImage(
@@ -83,11 +79,12 @@ class UserProvider extends ChangeNotifier {
         folder: 'homigo-care/profiles',
       );
 
-      if (response.secureUrl != null) {
-        await _dbService.updateUser(uid, {'profileImage': response.secureUrl});
+      if (response != null && response['secure_url'] != null) {
+        final url = response['secure_url'] as String;
+        await _dbService.updateUser(uid, {'profileImage': url});
         _currentUser = await _dbService.getUser(uid);
         notifyListeners();
-        return response.secureUrl;
+        return url;
       }
       return null;
     } catch (e) {
@@ -97,7 +94,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Upload CNIC
   Future<String?> uploadCnic(String uid, String filePath, bool isFront) async {
     try {
       final response = await _cloudinaryService.uploadImage(
@@ -105,12 +101,13 @@ class UserProvider extends ChangeNotifier {
         folder: 'homigo-care/cnic',
       );
 
-      if (response.secureUrl != null) {
+      if (response != null && response['secure_url'] != null) {
+        final url = response['secure_url'] as String;
         final field = isFront ? 'cnicFront' : 'cnicBack';
-        await _dbService.updateUser(uid, {field: response.secureUrl});
+        await _dbService.updateUser(uid, {field: url});
         _currentUser = await _dbService.getUser(uid);
         notifyListeners();
-        return response.secureUrl;
+        return url;
       }
       return null;
     } catch (e) {
@@ -120,7 +117,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Load all users (admin)
   void loadAllUsers() {
     _dbService.getUsersStream().listen((users) {
       _users = users;
@@ -128,7 +124,6 @@ class UserProvider extends ChangeNotifier {
     });
   }
 
-  // Load users by role
   void loadUsersByRole(String role) {
     _dbService.getUsersByRoleStream(role).listen((users) {
       _users = users;
@@ -136,7 +131,6 @@ class UserProvider extends ChangeNotifier {
     });
   }
 
-  // Verify user (admin)
   Future<bool> verifyUser(String uid) async {
     try {
       await _dbService.updateUserVerification(uid, true);
@@ -148,7 +142,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Suspend user (admin)
   Future<bool> suspendUser(String uid) async {
     try {
       await _dbService.updateUserActive(uid, false);
@@ -160,7 +153,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Delete user (admin)
   Future<bool> deleteUser(String uid) async {
     try {
       await _dbService.deleteUser(uid);

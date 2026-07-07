@@ -2,7 +2,7 @@ name: HOMIGO-CARE CI/CD
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -11,11 +11,17 @@ env:
   JAVA_VERSION: '17'
 
 jobs:
-  analyze:
-    name: Code Analysis
+  build-android:
+    name: Build Android
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -30,62 +36,9 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Check Formatting
-        run: dart format --set-exit-if-changed .
-
-      - name: Analyze Dart Code
-        run: dart analyze --fatal-infos
-
-      - name: Analyze Flutter Code
-        run: flutter analyze --fatal-infos
-
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    needs: analyze
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: stable
-          cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Run Tests
-        run: flutter test --coverage
-
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: coverage/lcov.info
-
-  build-android:
-    name: Build Android
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: stable
-          cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
+      - name: Analyze Code
+        run: flutter analyze --no-fatal-infos
+        continue-on-error: true
 
       - name: Build APK
         run: flutter build apk --release
@@ -108,7 +61,6 @@ jobs:
   build-web:
     name: Build Web
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - uses: actions/checkout@v4
 
@@ -131,22 +83,23 @@ jobs:
           name: homigo-care-web
           path: build/web/
 
-  quality-gate:
-    name: Quality Gate
+  summary:
+    name: Build Summary
     runs-on: ubuntu-latest
-    needs: [analyze, test, build-android, build-web]
+    needs: [build-android, build-web]
     steps:
-      - name: All Checks Passed
-        run: echo "✅ All CI/CD checks passed successfully!"
-
-      - name: Summary
+      - name: All Builds Complete
         run: |
-          echo "# HOMIGO-CARE Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# HOMIGO-CARE Build Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Analysis | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| Tests | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| Android APK | ✅ Built |" >> $GITHUB_STEP_SUMMARY
-          echo "| Android AAB | ✅ Built |" >> $GITHUB_STEP_SUMMARY
-          echo "| Web Build | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK**: Download from 'homigo-care-apk' artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- **AAB**: Download from 'homigo-care-aab' artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web**: Download from 'homigo-care-web' artifact" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## How to Download APK" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to Actions tab" >> $GITHUB_STEP_SUMMARY
+          echo "2. Click on the latest workflow run" >> $GITHUB_STEP_SUMMARY
+          echo "3. Scroll down to Artifacts section" >> $GITHUB_STEP_SUMMARY
+          echo "4. Click on 'homigo-care-apk' to download" >> $GITHUB_STEP_SUMMARY

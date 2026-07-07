@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../config/theme.dart';
 import '../../config/routes.dart';
-import '../../providers/splash_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -64,7 +61,6 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo
                 Container(
                   width: 150,
                   height: 150,
@@ -80,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primaryTeal.withOpacity(0.3),
+                        color: AppColors.primaryTeal.withValues(alpha: 0.3),
                         blurRadius: 30,
                         offset: const Offset(0, 10),
                       ),
@@ -93,7 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
-                // App Name
                 RichText(
                   text: TextSpan(
                     children: [
@@ -117,7 +112,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Tagline
                 Text(
                   'Because Care Begins at Home',
                   style: TextStyle(
@@ -127,7 +121,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 48),
-                // Loading
                 const SizedBox(
                   width: 30,
                   height: 30,
