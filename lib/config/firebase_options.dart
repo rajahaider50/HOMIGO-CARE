@@ -10,11 +10,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.web:
-        return web;
+        return webOptions;
       default:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        );
+        return android;
     }
   }
 
@@ -37,7 +35,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.homigo.care',
   );
 
-  static const FirebaseOptions web = FirebaseOptions(
+  static const FirebaseOptions webOptions = FirebaseOptions(
     apiKey: 'AIzaSyCrcPI8ReNNKhsi6Kcn5Qeux4sgl5adp7E',
     appId: '1:90367474956:web:b0ca9cf07db62429729d29',
     messagingSenderId: '90367474956',

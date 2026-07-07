@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primaryTeal.withValues(alpha: 0.3),
+                        color: AppColors.primaryTeal.withOpacity(0.3),
                         blurRadius: 30,
                         offset: const Offset(0, 10),
                       ),

@@ -76,7 +76,7 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
         category: 'Firebase Realtime Database',
         status: DiagnosticStatus.success,
         message: 'Connected',
-        details: 'URL: ${db.reference().parent?.key ?? "homigo-care-8360e"}',
+        details: 'Database: homigo-care-8360e',
       ));
     } catch (e) {
       _results.add(DiagnosticsResult(

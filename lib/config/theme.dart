@@ -150,15 +150,6 @@ class AppTheme {
           fontSize: 14,
         ),
       ),
-      cardTheme: CardThemeData(
-        color: Colors.white,
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.08),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.cardBorder, width: 1),
-        ),
-      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
         selectedItemColor: AppColors.primaryTeal,
@@ -254,15 +245,6 @@ class AppTheme {
         hintStyle: GoogleFonts.nunitoSans(
           color: Colors.white54,
           fontSize: 14,
-        ),
-      ),
-      cardTheme: CardThemeData(
-        color: const Color(0xFF1E1E1E),
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF3C3C3C), width: 1),
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
