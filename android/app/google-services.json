@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "90367474956",
+    "firebase_url": "https://homigo-care-8360e-default-rtdb.firebaseio.com",
+    "project_id": "homigo-care-8360e",
+    "storage_bucket": "homigo-care-8360e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90367474956:android:335d986b89445a95729d29",
+        "android_client_info": {
+          "package_name": "com.homigo.care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90367474956-agoqpqvs68fgn778kli79a6js93rirm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmTL1zlv1M4FsnRkDZQqe9LzTqQlulEQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90367474956-agoqpqvs68fgn778kli79a6js93rirm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "90367474956-jruc6e3vg7gtlpomaseg2mmi1fvbi3m7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homigo.care"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

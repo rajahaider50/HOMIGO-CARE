@@ -5,7 +5,7 @@ build/
 *.iml
 .idea/
 .vscode/
-*.lock
+# *.lock
 
 # Android
 android/app/debug/
@@ -30,8 +30,8 @@ ios/Flutter/Flutter.podspec
 *.env.production.local
 
 # Firebase
-google-services.json
-GoogleService-Info.plist
+# google-services.json
+# GoogleService-Info.plist
 
 # Cloudinary
 cloudinary_config.json
