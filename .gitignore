@@ -1,0 +1,64 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+*.iml
+.idea/
+.vscode/
+*.lock
+
+# Android
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/local.properties
+android/key.properties
+*.jks
+*.keystore
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Environment
+.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+
+# Cloudinary
+cloudinary_config.json
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+*.lcov
+
+# Build
+*.apk
+*.aab
+*.ipa
+
+# Misc
+*.cache
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+*~

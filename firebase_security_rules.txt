@@ -1,0 +1,245 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
+        ".write": "auth != null && (auth.uid === $uid || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
+        "email": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 254"
+        },
+        "phoneNumber": {
+          ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 15"
+        },
+        "age": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 150"
+        },
+        "weight": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 500"
+        },
+        "height": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 300"
+        },
+        "allergies": {
+          ".validate": "newData.isString() && newData.val().length <= 1000"
+        },
+        "illness": {
+          ".validate": "newData.isString() && newData.val().length <= 1000"
+        },
+        "isVerified": {
+          ".validate": "newData.isBoolean()"
+        },
+        "isActive": {
+          ".validate": "newData.isBoolean()"
+        },
+        "isAdmin": {
+          ".validate": "newData.isBoolean()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+
+    "doctors": {
+      "$uid": {
+        ".read": "auth != null && (root.child('users/' + auth.uid + '/isAdmin').val() === true || auth.uid === $uid)",
+        ".write": "auth != null && (root.child('users/' + auth.uid + '/isAdmin').val() === true || auth.uid === $uid)",
+        "specialization": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "rating": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5"
+        },
+        "consultationFee": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length <= 2000"
+        },
+        "experience": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "clinicAddress": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "isApproved": {
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    },
+
+    "appointments": {
+      "$appointmentId": {
+        ".read": "auth != null && (root.child('users/' + auth.uid + '/isAdmin').val() === true || root.child('appointments/' + $appointmentId + '/patientId').val() === auth.uid || root.child('appointments/' + $appointmentId + '/doctorId').val() === auth.uid)",
+        ".write": "auth != null && (root.child('users/' + auth.uid + '/isAdmin').val() === true || root.child('appointments/' + $appointmentId + '/patientId').val() === auth.uid || root.child('appointments/' + $appointmentId + '/doctorId').val() === auth.uid)",
+        "patientId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "doctorId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "date": {
+          ".validate": "newData.isString() && newData.val().length === 10"
+        },
+        "time": {
+          ".validate": "newData.isString() && newData.val().length === 5"
+        },
+        "status": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"
+        },
+        "type": {
+          ".validate": "newData.isString() && newData.val().length <= 50"
+        },
+        "notes": {
+          ".validate": "newData.isString() && newData.val().length <= 1000"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+
+    "notifications": {
+      "$notificationId": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 200"
+        },
+        "body": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+        },
+        "type": {
+          ".validate": "newData.isString() && newData.val().length <= 50"
+        },
+        "targetRole": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"
+        },
+        "isRead": {
+          ".validate": "newData.isBoolean()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+
+    "settings": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
+      "appName": {
+        ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+      },
+      "logo": {
+        ".validate": "newData.isString() && newData.val().length <= 500"
+      },
+      "primaryColor": {
+        ".validate": "newData.isString() && newData.val().length <= 10"
+      },
+      "secondaryColor": {
+        ".validate": "newData.isString() && newData.val().length <= 10"
+      },
+      "supportEmail": {
+        ".validate": "newData.isString() && newData.val().length <= 254"
+      },
+      "supportPhone": {
+        ".validate": "newData.isString() && newData.val().length <= 15"
+      },
+      "privacyPolicy": {
+        ".validate": "newData.isString() && newData.val().length <= 50000"
+      },
+      "termsOfService": {
+        ".validate": "newData.isString() && newData.val().length <= 50000"
+      },
+      "about": {
+        ".validate": "newData.isString() && newData.val().length <= 10000"
+      },
+      "maintenanceMode": {
+        ".validate": "newData.isBoolean()"
+      }
+    },
+
+    "splash": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
+      "type": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 4"
+      },
+      "isEnabled": {
+        ".validate": "newData.isBoolean()"
+      },
+      "videoUrl": {
+        ".validate": "newData.isString() && newData.val().length <= 500"
+      },
+      "imageUrl": {
+        ".validate": "newData.isString() && newData.val().length <= 500"
+      },
+      "htmlContent": {
+        ".validate": "newData.isString() && newData.val().length <= 50000"
+      },
+      "animatedText": {
+        ".validate": "newData.isString() && newData.val().length <= 500"
+      }
+    },
+
+    "banners": {
+      "$bannerId": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
+        "imageUrl": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "title": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "link": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "isActive": {
+          ".validate": "newData.isBoolean()"
+        },
+        "order": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    "userNotifications": {
+      "$uid": {
+        "$notificationId": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid",
+          "isRead": {
+            ".validate": "newData.isBoolean()"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+
+    "chats": {
+      "$chatId": {
+        ".read": "auth != null && (root.child('chats/' + $chatId + '/patientId').val() === auth.uid || root.child('chats/' + $chatId + '/doctorId').val() === auth.uid || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
+        ".write": "auth != null && (root.child('chats/' + $chatId + '/patientId').val() === auth.uid || root.child('chats/' + $chatId + '/doctorId').val() === auth.uid)",
+        "messages": {
+          "$messageId": {
+            "senderId": {
+              ".validate": "newData.isString() && newData.val().length > 0"
+            },
+            "message": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 5000"
+            },
+            "timestamp": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+      }
+    }
+  }
+}
